@@ -11,6 +11,8 @@ A modular Ansible provisioner for Ubuntu 22.04 security hardening, detection scr
 ansible-playbook provisioner.yml
 ```
 
+> Before you execute the role `c`, please ensure you have created a user and copy your own pubkey to the user `~/.ssh/authorized_keys` file`
+
 ```sh
 # Run specific role(s) by tags, please refer to vars/roles to check all the avaliable tags
 ansible-playbook provisioner.yml --tags a
