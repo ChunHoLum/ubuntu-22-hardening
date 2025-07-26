@@ -4,6 +4,10 @@ This role is aimed to apply foundational hardening to a fresh Ubuntu 22.04 serve
 
 > Note: Controls for SSH hardening and for monitoring/detection are considered out of scope for this playbook and are assumed to be handled by separate role (b & c).
 
+## How to use this role
+
+You can run this role via the core provisioner playbook [readme.md](/README.md)
+
 ## Security Philosophy & Threat Model
 
 A server with a public IP address is immediately and continuously exposed to a global threat landscape dominated by automated, opportunistic attacks. These are not sophisticated, targeted campaigns but rather high-volume scans from bots and scripts looking for "low-hanging fruit."
