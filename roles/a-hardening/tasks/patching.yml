@@ -3,7 +3,7 @@
   ansible.builtin.apt:
     update_cache: true
     cache_valid_time: 3600
-  become: true
+  become: yes
 
 - name: Install unattended-upgrades package
   ansible.builtin.apt:
@@ -11,7 +11,7 @@
       - unattended-upgrades
       - apt-listchanges
     state: present
-  become: true
+  become: yes
 
 - name: Configure unattended-upgrades allowed origins
   ansible.builtin.lineinfile:
@@ -20,7 +20,7 @@
     line: '        "{{ item }}";'
     insertafter: '^Unattended-Upgrade::Allowed-Origins'
     state: present
-  become: true
+  become: yes
   loop: '{{ security_baseline_allowed_origins }}'
   notify: restart unattended-upgrades
 
@@ -30,7 +30,7 @@
     regexp: '^//?\s*Unattended-Upgrade::Automatic-Reboot\s'
     line: 'Unattended-Upgrade::Automatic-Reboot "{{ security_baseline_auto_reboot | lower }}";'
     state: present
-  become: true
+  become: yes
   notify: restart unattended-upgrades
 
 - name: Configure automatic reboot time
@@ -39,7 +39,7 @@
     regexp: '^//?\s*Unattended-Upgrade::Automatic-Reboot-Time\s'
     line: 'Unattended-Upgrade::Automatic-Reboot-Time "{{ security_baseline_auto_reboot_time }}";'
     state: present
-  become: true
+  become: yes
   when: security_baseline_auto_reboot | bool
   notify: restart unattended-upgrades
 
@@ -49,7 +49,7 @@
     regexp: '^//?\s*Unattended-Upgrade::Mail\s'
     line: 'Unattended-Upgrade::Mail "{{ security_baseline_mail_report }}";'
     state: present
-  become: true
+  become: yes
   notify: restart unattended-upgrades
 
 - name: Configure mail only on error
@@ -58,7 +58,7 @@
     regexp: '^//?\s*Unattended-Upgrade::MailOnlyOnError\s'
     line: 'Unattended-Upgrade::MailOnlyOnError "{{ security_baseline_mail_only_on_error | lower }}";'
     state: present
-  become: true
+  become: yes
   notify: restart unattended-upgrades
 
 - name: Enable automatic updates
@@ -72,13 +72,13 @@
     owner: root
     group: root
     mode: '0644'
-  become: true
+  become: yes
 
 - name: Apply all available security updates immediately
   ansible.builtin.apt:
     upgrade: safe
     update_cache: true
-  become: true
+  become: yes
   register: apt_upgrade_result
   when: security_baseline_apply_updates_now | bool
 
@@ -86,7 +86,7 @@
   ansible.builtin.stat:
     path: /var/run/reboot-required
   register: reboot_required
-  become: true
+  become: yes
 
 - name: Display reboot requirement
   ansible.builtin.debug:

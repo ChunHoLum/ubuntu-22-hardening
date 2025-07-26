@@ -5,19 +5,19 @@
     state: present
     update_cache: true
     cache_valid_time: 3600
-  become: true
+  become: yes
 
 - name: Reset UFW to defaults
   community.general.ufw:
     state: reset
-  become: true
+  become: yes
   when: security_baseline_firewall_reset | default(false) | bool
 
 - name: Set UFW default policies
   community.general.ufw:
     direction: '{{ item.direction }}'
     policy: '{{ item.policy }}'
-  become: true
+  become: yes
   loop:
     - {
         direction: incoming,
@@ -32,7 +32,7 @@
 - name: Configure UFW logging
   community.general.ufw:
     logging: '{{ security_baseline_firewall_logging }}'
-  become: true
+  become: yes
 
 - name: Allow default ports
   community.general.ufw:
@@ -41,7 +41,7 @@
     proto: "{{ item.protocol | default('tcp') }}"
     src: "{{ item.from | default('any') }}"
     comment: "{{ item.comment | default('Default rule') }}"
-  become: true
+  become: yes
   loop: '{{ security_baseline_default_allowed_ports }}'
 
 - name: Allow additional ports
@@ -51,7 +51,7 @@
     proto: "{{ item.protocol | default('tcp') }}"
     src: "{{ item.from | default('any') }}"
     comment: "{{ item.comment | default('Custom rule') }}"
-  become: true
+  become: yes
   loop: '{{ security_baseline_allowed_ports }}'
   when: security_baseline_allowed_ports | length > 0
 
@@ -62,12 +62,12 @@
     port: '{{ item.port | string }}'
     proto: "{{ item.protocol | default('tcp') }}"
     comment: "{{ item.comment | default('Source-specific rule') }}"
-  become: true
+  become: yes
   loop: '{{ security_baseline_allowed_sources }}'
   when: security_baseline_allowed_sources | length > 0
 
 - name: Enable UFW
   community.general.ufw:
     state: enabled
-  become: true
+  become: yes
   register: ufw_enabled

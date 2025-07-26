@@ -16,7 +16,7 @@
     state: present
     reload: true
     sysctl_file: '{{ security_baseline_sysctl_config_file }}'
-  become: true
+  become: yes
   loop: '{{ security_baseline_sysctl_settings | dict2items }}'
   loop_control:
     label: '{{ item.key }}={{ item.value }}'
@@ -28,7 +28,7 @@
     owner: root
     group: root
     mode: '0644'
-  become: true
+  become: yes
 
 - name: Create sysctl configuration from template
   ansible.builtin.template:
@@ -38,5 +38,5 @@
     group: root
     mode: '0644'
     backup: true
-  become: true
+  become: yes
   notify: reload sysctl
