@@ -1,6 +1,6 @@
 # Created by https://www.toptal.com/developers/gitignore/api/ansible,python,go
 # Edit at https://www.toptal.com/developers/gitignore?templates=ansible,python,go
-
+.DS_Store
 ### Ansible ###
 *.retry
 

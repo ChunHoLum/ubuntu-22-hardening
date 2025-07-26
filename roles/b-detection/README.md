@@ -22,10 +22,14 @@ Dependices used:
 ## How to run the script
 
 ```sh
-python3 /opt/detection.py
+sudo python3 /opt/detection.py
+# or run in background
+sudo python3 /opt/detection.py &
+# and check the log in
+tail -f /var/log/custom-security-events-detection.json
 ```
 
-The script will print the detected event in the console also logged to `/var/log/custom-security-events-detection.json` in json format
+The script will print the detected event in the console also logged to `/var/log/custom-security-events-detection.json` in json format. The monitor loop will have a `8` second of interval gap.
 
 ## Chosen Security Events
 
