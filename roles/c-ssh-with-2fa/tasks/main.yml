@@ -1,0 +1,73 @@
+---
+- name: Ensure backup directory exists
+  file:
+    path: '{{ ssh_2fa_backup_dir }}'
+    state: directory
+    mode: '0755'
+
+- name: Backup existing sshd_config
+  copy:
+    src: /etc/ssh/sshd_config
+    dest: '{{ ssh_2fa_backup_dir }}/sshd_config_{{ ansible_date_time.epoch }}'
+    remote_src: yes
+    mode: '0644'
+  when: "'/etc/ssh/sshd_config' is file"
+
+- name: Backup existing pam.d/sshd
+  copy:
+    src: /etc/pam.d/sshd
+    dest: '{{ ssh_2fa_backup_dir }}/pam_sshd_{{ ansible_date_time.epoch }}'
+    remote_src: yes
+    mode: '0644'
+  when: "'/etc/pam.d/sshd' is file"
+
+- name: Install required packages (including libpam-google-authenticator)
+  apt:
+    name: '{{ ssh_2fa_packages }}'
+    state: present
+    update_cache: yes
+
+- name: Enable and start NTP for time sync
+  service:
+    name: ntp
+    enabled: yes
+    state: started
+
+- name: Copy and configure sshd_config
+  template:
+    src: sshd_config.j2
+    dest: /etc/ssh/sshd_config
+    mode: '0644'
+    validate: '/usr/sbin/sshd -t -f %s'
+  notify: Restart SSH service
+
+- name: Copy and configure pam.d/sshd
+  template:
+    src: pam_sshd.j2
+    dest: /etc/pam.d/sshd
+    mode: '0644'
+  notify: Restart SSH service
+
+- name: Create secure flags directory
+  file:
+    path: '{{ ssh_2fa_flags_dir }}'
+    state: directory
+    owner: root
+    group: root
+    mode: '{{ ssh_2fa_flags_dir_mode }}'
+
+- name: Copy bypass script
+  copy:
+    src: 2fa_bypass.sh
+    dest: '{{ ssh_2fa_bypass_script_path }}'
+    owner: root
+    group: root
+    mode: '{{ ssh_2fa_script_mode }}'
+
+- name: Copy enrolment script
+  copy:
+    src: 2fa_enroll.sh
+    dest: '{{ ssh_2fa_enroll_script_path }}'
+    owner: root
+    group: root
+    mode: '{{ ssh_2fa_script_mode }}'

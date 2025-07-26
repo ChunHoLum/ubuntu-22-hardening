@@ -1,0 +1,10 @@
+---
+ssh_2fa_packages:
+  - openssh-server
+  - libpam-google-authenticator
+
+ssh_2fa_bypass_script_path: /usr/local/bin/2fa_bypass.sh
+ssh_2fa_enroll_script_path: /etc/profile.d/2fa_enroll.sh
+ssh_2fa_flags_dir: /var/lib/2fa_flags
+
+ssh_2fa_backup_dir: /etc/ssh/backups
