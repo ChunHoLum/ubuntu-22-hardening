@@ -11,20 +11,11 @@
 - name: Include firewall configuration tasks
   ansible.builtin.include_tasks: firewall.yml
   when: security_baseline_firewall_enabled | bool
-  tags:
-    - security
-    - firewall
 
 - name: Include automated patching tasks
   ansible.builtin.include_tasks: patching.yml
   when: security_baseline_patching_enabled | bool
-  tags:
-    - security
-    - patching
 
 - name: Include kernel hardening tasks
   ansible.builtin.include_tasks: kernel-hardening.yml
   when: security_baseline_kernel_hardening_enabled | bool
-  tags:
-    - security
-    - kernel
