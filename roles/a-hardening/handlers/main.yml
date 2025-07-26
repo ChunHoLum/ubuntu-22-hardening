@@ -1,0 +1,20 @@
+---
+- name: reload ufw
+  community.general.ufw:
+    state: reloaded
+  become: true
+  when: security_baseline_firewall_enabled | bool
+
+- name: reload sysctl
+  ansible.builtin.command: sysctl --system
+  become: true
+  changed_when: true
+  when: security_baseline_kernel_hardening_enabled | bool
+
+- name: restart unattended-upgrades
+  ansible.builtin.systemd:
+    name: unattended-upgrades
+    state: restarted
+    daemon_reload: true
+  become: true
+  when: security_baseline_patching_enabled | bool

@@ -1,0 +1,4 @@
+---
+security_baseline_sysctl_config_file: /etc/sysctl.d/99-ansible-security.conf
+security_baseline_unattended_upgrades_config: /etc/apt/apt.conf.d/50unattended-upgrades
+security_baseline_auto_upgrades_config: /etc/apt/apt.conf.d/20auto-upgrades

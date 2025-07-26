@@ -1,0 +1,14 @@
+---
+provisioner_roles:
+  - name: a-hardening
+    tags:
+      - a
+      - hardening
+  - name: b-detection
+    tags:
+      - b
+      - detection
+  - name: c-ssh-with-2fa
+    tags:
+      - c
+      - ssh

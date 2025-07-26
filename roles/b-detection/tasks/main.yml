@@ -1,0 +1,48 @@
+---
+- name: Update package cache
+  ansible.builtin.apt:
+    update_cache: yes
+    cache_valid_time: 3600
+  become: yes
+
+- name: Ensure system dependencies are installed
+  ansible.builtin.package:
+    name:
+      - auditd
+      - python3-pip
+    state: present
+  become: yes
+
+- name: Ensure the auditd service is started and enabled on boot
+  ansible.builtin.service:
+    name: auditd
+    state: started
+    enabled: yes
+  become: yes
+
+- name: Ensure required Python libraries are installed via pip
+  ansible.builtin.pip:
+    name: psutil
+    executable: pip3
+    state: present
+  become: yes
+
+- name: Copy the detection script to the target host
+  ansible.builtin.copy:
+    src: detection.py
+    dest: '{{ detection_script_path }}'
+    owner: root
+    group: root
+    mode: '0755'
+  become: yes
+
+- name: Deploy auditd rules for the detection
+  ansible.builtin.template:
+    src: 99-monitor.rules.j2
+    dest: '{{ detection_audit_rules_file }}'
+    owner: root
+    group: root
+    mode: '0640'
+  become: yes
+  notify:
+    - Restart auditd

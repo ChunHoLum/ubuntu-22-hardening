@@ -1,0 +1,30 @@
+---
+- name: Verify supported operating system
+  ansible.builtin.assert:
+    that:
+      - ansible_facts['os_family'] == "Debian"
+      - ansible_facts['distribution'] == "Ubuntu"
+      - ansible_facts['distribution_version'] is version('22.04', '==')
+    fail_msg: 'This role only supports Ubuntu 22.04'
+    success_msg: 'Operating system is supported'
+
+- name: Include firewall configuration tasks
+  ansible.builtin.include_tasks: firewall.yml
+  when: security_baseline_firewall_enabled | bool
+  tags:
+    - security
+    - firewall
+
+- name: Include automated patching tasks
+  ansible.builtin.include_tasks: patching.yml
+  when: security_baseline_patching_enabled | bool
+  tags:
+    - security
+    - patching
+
+- name: Include kernel hardening tasks
+  ansible.builtin.include_tasks: kernel-hardening.yml
+  when: security_baseline_kernel_hardening_enabled | bool
+  tags:
+    - security
+    - kernel

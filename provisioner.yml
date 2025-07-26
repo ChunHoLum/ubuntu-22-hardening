@@ -1,0 +1,25 @@
+---
+- name: Ubuntu Security Provisioner
+  hosts: ubuntu_servers
+  gather_facts: yes
+
+  vars_files:
+    - vars/roles.yml
+
+  pre_tasks:
+    - name: Show execution info
+      debug:
+        msg: |
+          Provisioner starting...
+          Target host: {{ inventory_hostname }}
+          Tags requested: {{ ansible_run_tags | default(['all']) }}
+      tags: always
+
+  tasks:
+    - name: Execute provisioner roles
+      include_role:
+        name: '{{ item.name }}'
+        apply:
+          tags: '{{ item.tags }}'
+      loop: '{{ provisioner_roles }}'
+      tags: always

@@ -1,0 +1,3 @@
+---
+detection_script_path: /opt/detection.py
+detection_audit_rules_file: /etc/audit/rules.d/99-monitor.rules

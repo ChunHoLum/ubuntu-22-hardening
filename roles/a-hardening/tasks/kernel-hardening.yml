@@ -1,0 +1,42 @@
+---
+- name: Validate sysctl parameters
+  ansible.builtin.assert:
+    that:
+      - item.key is match('^[a-zA-Z][a-zA-Z0-9_.]*$')
+      - item.value is number or item.value in ['0', '1', '2']
+    fail_msg: 'Invalid sysctl parameter: {{ item.key }}={{ item.value }}'
+  loop: '{{ security_baseline_sysctl_settings | dict2items }}'
+  loop_control:
+    label: '{{ item.key }}'
+
+- name: Apply sysctl security settings
+  ansible.posix.sysctl:
+    name: '{{ item.key }}'
+    value: '{{ item.value }}'
+    state: present
+    reload: true
+    sysctl_file: '{{ security_baseline_sysctl_config_file }}'
+  become: true
+  loop: '{{ security_baseline_sysctl_settings | dict2items }}'
+  loop_control:
+    label: '{{ item.key }}={{ item.value }}'
+  notify: reload sysctl
+
+- name: Ensure sysctl configuration file permissions
+  ansible.builtin.file:
+    path: '{{ security_baseline_sysctl_config_file }}'
+    owner: root
+    group: root
+    mode: '0644'
+  become: true
+
+- name: Create sysctl configuration from template
+  ansible.builtin.template:
+    src: sysctl-security.conf.j2
+    dest: '{{ security_baseline_sysctl_config_file }}'
+    owner: root
+    group: root
+    mode: '0644'
+    backup: true
+  become: true
+  notify: reload sysctl
