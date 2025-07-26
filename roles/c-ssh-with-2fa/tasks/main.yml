@@ -12,6 +12,7 @@
     remote_src: yes
     mode: '0644'
   when: "'/etc/ssh/sshd_config' is file"
+  become: yes
 
 - name: Backup existing pam.d/sshd
   copy:
@@ -20,18 +21,21 @@
     remote_src: yes
     mode: '0644'
   when: "'/etc/pam.d/sshd' is file"
+  become: yes
 
 - name: Install required packages (including libpam-google-authenticator)
   apt:
     name: '{{ ssh_2fa_packages }}'
     state: present
     update_cache: yes
+  become: yes
 
 - name: Enable and start NTP for time sync
   service:
     name: ntp
     enabled: yes
     state: started
+  become: yes
 
 - name: Copy and configure sshd_config
   template:
@@ -40,6 +44,7 @@
     mode: '0644'
     validate: '/usr/sbin/sshd -t -f %s'
   notify: Restart SSH service
+  become: yes
 
 - name: Copy and configure pam.d/sshd
   template:
@@ -47,6 +52,7 @@
     dest: /etc/pam.d/sshd
     mode: '0644'
   notify: Restart SSH service
+  become: yes
 
 - name: Create secure flags directory
   file:
@@ -55,6 +61,7 @@
     owner: root
     group: root
     mode: '{{ ssh_2fa_flags_dir_mode }}'
+  become: yes
 
 - name: Copy bypass script
   copy:
@@ -63,6 +70,7 @@
     owner: root
     group: root
     mode: '{{ ssh_2fa_script_mode }}'
+  become: yes
 
 - name: Copy enrolment script
   copy:
@@ -71,3 +79,4 @@
     owner: root
     group: root
     mode: '{{ ssh_2fa_script_mode }}'
+  become: yes

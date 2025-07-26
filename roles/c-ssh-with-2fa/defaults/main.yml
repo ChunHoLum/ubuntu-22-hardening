@@ -2,6 +2,7 @@
 ssh_2fa_packages:
   - openssh-server
   - libpam-google-authenticator
+  - ntp
 
 ssh_2fa_bypass_script_path: /usr/local/bin/2fa_bypass.sh
 ssh_2fa_enroll_script_path: /etc/profile.d/2fa_enroll.sh
