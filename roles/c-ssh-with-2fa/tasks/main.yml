@@ -4,6 +4,7 @@
     path: '{{ ssh_2fa_backup_dir }}'
     state: directory
     mode: '0755'
+  become: yes
 
 - name: Backup existing sshd_config
   copy:
