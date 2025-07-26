@@ -32,7 +32,7 @@ This role is for design for `A. Basic Security Hardening of a Public-Facing Serv
 
 The tags for this role is `a` or `hardening`.
 
-Link to [README.md](roles/a-hardening/README.md)
+Link to [README.md](/roles/a-hardening/README.md)
 
 ### b-detection
 
@@ -40,7 +40,7 @@ This role is design for `B. Script for Detecting Suspicious Admin Activity`.
 
 The tags for this role is `b` or `detection`.
 
-Link to [README.md](roles/b-detection/README.md)
+Link to [README.md](/roles/b-detection/README.md)
 
 ### c-ssh-with-2fa
 
@@ -48,7 +48,7 @@ This role is design for `C. Set Up SSH with 2FA (Key + OTP)`.
 
 The tags for this role is `c` or `ssh-with-2fa`.
 
-Link to [README.md](roles/c-ssh-with-2fa/README.md)
+Link to [README.md](/roles/c-ssh-with-2fa/README.md)
 
 ## Feature & Core Design Decision
 
